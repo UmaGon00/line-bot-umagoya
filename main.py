@@ -9,7 +9,6 @@ from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
 )
-
 from linebot.exceptions import (
     InvalidSignatureError
 )
@@ -37,11 +36,11 @@ def callback():
     signature = request.headers['X-Line-Signature']
 
     body = request.get_data(as_text=True)
-    app.logger.info("Request body" + body)
+    app.logger.info("Request body: " + body)
+
 
     try:
         handler.handle(body, signature)
-
     except InvalidSignatureError:
         abort(400)
 
@@ -57,6 +56,7 @@ def handle_message(event):
     event.reply_token,
     TextSendMessage(text=result)
     )
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
